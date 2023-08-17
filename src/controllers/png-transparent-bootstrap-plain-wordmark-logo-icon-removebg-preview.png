@@ -145,11 +145,38 @@
    },
    {
       "id": 17,
-      "name": "developer frustrado",
-      "price": 500000,
-      "discount": 5,
+      "name": "",
+      "price": 213,
+      "discount": 23,
       "category": "in-sale",
-      "description": "No quiere saber nada de multer",
-      "image": "1692308913924_products_.jpg"
+      "description": "dsad",
+      "image": null
+   },
+   {
+      "id": 18,
+      "name": "dasd",
+      "price": 1200,
+      "discount": 2,
+      "category": "in-sale",
+      "description": "213123123",
+      "image": null
+   },
+   {
+      "id": 19,
+      "name": "Samsung J7",
+      "price": 0,
+      "discount": 15,
+      "category": "in-sale",
+      "description": "2131asd",
+      "image": null
+   },
+   {
+      "id": 20,
+      "name": "",
+      "price": 23123,
+      "discount": 10,
+      "category": "in-sale",
+      "description": "123124ffdsadad",
+      "image": null
    }
 ]

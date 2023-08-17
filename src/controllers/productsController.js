@@ -38,7 +38,7 @@ const controller = {
 	// Create -  Method to store
 	store: (req, res) => {
 
-		const { name, price, description, discount, category } = req.body
+		const { name, price, description, discount, category, image} = req.body
 		const product = {
 			id: products[products.length - 1].id + 1,
 			name: name.trim(),
@@ -46,13 +46,14 @@ const controller = {
 			discount: +discount,
 			category,
 			description: description.trim(),
-			image: null
+			image: req.file ? req.file.filename : null
 		}
 
 		products.push(product)
 
-		fs.writeFileSync(path.join(__dirname, '../data/productsDataBase.json'), JSON.stringify(products, null, 3))
-		return res.redirect('/products')
+		fs.writeFileSync(path.resolve(__dirname, '../data/productsDataBase.json'), JSON.stringify(products, null, 3), 'utf-8')
+/* 	 	fs.writeFileSync(path.resolve(__dirname, image), JSON.stringify(products, null, 3), 'utf-8')  //Linea agregada para intentar guardar la imagen
+ */		return res.redirect('/products')
 	},
 
 	// Update - Form to edit
