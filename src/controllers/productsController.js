@@ -10,9 +10,6 @@ const controller = {
 	// Root - Show all products
 	index: (req, res) => {
 
-		const productsFilePath = path.join(__dirname, '../data/productsDataBase.json');
-		const products = JSON.parse(fs.readFileSync(productsFilePath, 'utf-8'));
-
 		return res.render('products', {
 			products,
 			toThousand
@@ -37,8 +34,7 @@ const controller = {
 
 	// Create -  Method to store
 	store: (req, res) => {
-
-		const { name, price, description, discount, category, image} = req.body
+		const { name, price, description, discount, category } = req.body;
 		const product = {
 			id: products[products.length - 1].id + 1,
 			name: name.trim(),
@@ -47,19 +43,19 @@ const controller = {
 			category,
 			description: description.trim(),
 			image: req.file ? req.file.filename : null
-		}
-
-		products.push(product)
-
-		fs.writeFileSync(path.resolve(__dirname, '../data/productsDataBase.json'), JSON.stringify(products, null, 3), 'utf-8')
-/* 	 	fs.writeFileSync(path.resolve(__dirname, image), JSON.stringify(products, null, 3), 'utf-8')  //Linea agregada para intentar guardar la imagen
- */		return res.redirect('/products')
+		};
+	
+		products.push(product);
+	
+		fs.writeFileSync(path.resolve(__dirname, '../data/productsDataBase.json'), JSON.stringify(products, null, 3), 'utf-8');
+	
+		return res.redirect('/products');
 	},
 
 	// Update - Form to edit
 	edit: (req, res) => {
-
-		const product = products.find(product => product.id === +req.params.id)
+		const id = req.params.id
+		const product = products.find(product => product.id === +id)
 
 
 		return res.render('product-edit-form', {
@@ -92,13 +88,13 @@ const controller = {
 
 	// Delete - Delete one product from DB
 	destroy: (req, res) => {
+		const id = req.params.id
+		const productsModify = products.filter(product => product.id !== +id);
 
-		const productsModify = products.filter(product => product.id !== +req.params.id)
-
-		fs.writeFileSync(path.join(__dirname, '../data/productsDataBase.json'), JSON.stringify(productsModify, null, 3))
-
-
-		return res.redirect('/products')
+	
+		fs.writeFileSync(path.join(__dirname, '../data/productsDataBase.json'), JSON.stringify(productsModify, null, 3));
+	
+		return res.redirect('/products');
 	}
 };
 
