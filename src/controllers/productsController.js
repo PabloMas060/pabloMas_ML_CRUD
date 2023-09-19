@@ -1,3 +1,5 @@
+db = require('../database/models')
+
 const fs = require('fs');
 const path = require('path');
 
@@ -9,22 +11,27 @@ const toThousand = n => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 const controller = {
 	// Root - Show all products
 	index: (req, res) => {
+		db.Product.findAll()
+			.then(products => {
+				return res.render('products', {
+					products,
+					toThousand
+				})
+			})
 
-		return res.render('products', {
-			products,
-			toThousand
-		})
 	},
 
 	// Detail - Detail from one product
 	detail: (req, res) => {
-		const id = req.params.id;
-		const product = products.find(product => product.id === +id)
 
-		return res.render('detail', {
-			...product,
-			toThousand
-		})
+		db.Product.findByPk(req.params.id)
+			.then(product => {
+				return res.render('detail', {
+					...product.dataValues,
+					toThousand
+				})
+			})
+
 	},
 
 	// Create - Form to create
@@ -44,11 +51,11 @@ const controller = {
 			description: description.trim(),
 			image: req.file ? req.file.filename : null
 		};
-	
+
 		products.push(product);
-	
+
 		fs.writeFileSync(path.resolve(__dirname, '../data/productsDataBase.json'), JSON.stringify(products, null, 3), 'utf-8');
-	
+
 		return res.redirect('/products');
 	},
 
@@ -91,9 +98,9 @@ const controller = {
 		const id = req.params.id
 		const productsModify = products.filter(product => product.id !== +id);
 
-	
+
 		fs.writeFileSync(path.join(__dirname, '../data/productsDataBase.json'), JSON.stringify(productsModify, null, 3));
-	
+
 		return res.redirect('/products');
 	}
 };
