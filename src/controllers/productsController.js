@@ -60,19 +60,43 @@ const controller = {
 
 	// Update - Form to edit
 	edit: (req, res) => {
-		const id = req.params.id
-		const product = products.find(product => product.id === +id)
+		
+		const product = db.Product.findByPk(req.params.id)
+			.then((product) => {
+				return res.render('product-edit-form', {
+					...product.dataValues
+				})
+			})
+			.catch(error => console.log(error))
 
 
-		return res.render('product-edit-form', {
-			...product
-		})
+		
 	},
 	// Update - Method to update
 	update: (req, res) => {
 
 		const { name, price, description, discount, category } = req.body
 
+		const productModified = db.Product.update({
+			name : name.trim(),
+				price : +price,
+				discount : +discount,
+				category,
+				description : description.trim()
+		},
+		{
+			where : {id : req.params.id}
+		})
+			.then((productModified) => {
+				return res.redirect('/products')
+			})
+			.catch(error => console.log(error))
+
+
+
+
+
+/* 
 		const productsModify = products.map(product => {
 
 			if (product.id === +req.params.id) {
@@ -89,7 +113,7 @@ const controller = {
 
 		fs.writeFileSync(path.join(__dirname, '../data/productsDataBase.json'), JSON.stringify(productsModify, null, 3))
 
-		return res.redirect('/products')
+		return res.redirect('/products') */
 	},
 
 	// Delete - Delete one product from DB
