@@ -38,13 +38,22 @@ const controller = {
 
 	search: (req, res) => {
 		const keywords = req.query.keywords
-		/* const results = products.filter(product => product.name.toLowerCase().includes(keywords.toLowerCase())) */
-		
 		const results = db.Product.findAll({
 			where: {
-				name: {
-					[Op.like]: `%${keywords.toLowerCase()}%`
-				}
+				[Op.or]: [
+					{
+						name: {
+							[Op.substring]: keywords.toLowerCase()
+						}
+
+					},
+					{
+						description: {
+							[Op.substring]: keywords.toLowerCase()
+						}
+					}
+				]
+
 			}
 		})
 			.then(results => {
@@ -55,9 +64,6 @@ const controller = {
 				})
 			})
 			.catch(error => console.log(error))
-
-
-
 	},
 };
 
