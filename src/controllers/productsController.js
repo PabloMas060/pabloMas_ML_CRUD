@@ -42,21 +42,20 @@ const controller = {
 	// Create -  Method to store
 	store: (req, res) => {
 		const { name, price, description, discount, category } = req.body;
-		const product = {
-			id: products[products.length - 1].id + 1,
+
+		db.Product.create({
 			name: name.trim(),
 			price: +price,
 			discount: +discount,
 			category,
 			description: description.trim(),
 			image: req.file ? req.file.filename : null
-		};
+		})
+			.then(() => {
+				return res.redirect('/products')
+			})
+			.catch(error => console.log(error))
 
-		products.push(product);
-
-		fs.writeFileSync(path.resolve(__dirname, '../data/productsDataBase.json'), JSON.stringify(products, null, 3), 'utf-8');
-
-		return res.redirect('/products');
 	},
 
 	// Update - Form to edit
