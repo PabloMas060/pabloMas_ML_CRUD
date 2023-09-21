@@ -1,5 +1,6 @@
 /* base de datos */
-const db = require('../database/models')
+const db = require('../database/models');
+const Op = db.Sequelize.Op;
 
 
 const fs = require('fs');
@@ -37,14 +38,26 @@ const controller = {
 
 	search: (req, res) => {
 		const keywords = req.query.keywords
-		const results = products.filter(product => product.name.toLowerCase().includes(keywords.toLowerCase()))
-
-
-		return res.render('results', {
-			results,
-			toThousand,
-			keywords
+		/* const results = products.filter(product => product.name.toLowerCase().includes(keywords.toLowerCase())) */
+		
+		const results = db.Product.findAll({
+			where: {
+				name: {
+					[Op.like]: `%${keywords.toLowerCase()}%`
+				}
+			}
 		})
+			.then(results => {
+				return res.render('results', {
+					results,
+					toThousand,
+					keywords
+				})
+			})
+			.catch(error => console.log(error))
+
+
+
 	},
 };
 

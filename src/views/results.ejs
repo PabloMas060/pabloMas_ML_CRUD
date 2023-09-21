@@ -22,7 +22,7 @@
 					<% if (results.length) { %>
 						<% results.forEach(product=> { %>
 							<div class="col-12 col-sm-6 col-lg-3">
-								<%- include('partials/product',{ ...product, toThousand }) %>
+								<%- include('partials/product',{ ...product.dataValues, toThousand }) %>
 							</div>
 							<% }) %>
 
