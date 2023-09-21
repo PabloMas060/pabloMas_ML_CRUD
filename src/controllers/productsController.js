@@ -91,40 +91,20 @@ const controller = {
 				return res.redirect('/products')
 			})
 			.catch(error => console.log(error))
-
-
-
-
-
-/* 
-		const productsModify = products.map(product => {
-
-			if (product.id === +req.params.id) {
-				product.name = name.trim()
-				product.price = +price
-				product.discount = +discount
-				product.category
-				product.description = description.trim()
-			}
-
-
-			return product
-		})
-
-		fs.writeFileSync(path.join(__dirname, '../data/productsDataBase.json'), JSON.stringify(productsModify, null, 3))
-
-		return res.redirect('/products') */
 	},
 
 	// Delete - Delete one product from DB
 	destroy: (req, res) => {
-		const id = req.params.id
-		const productsModify = products.filter(product => product.id !== +id);
+		db.Product.destroy({
+			where : {
+				id: req.params.id
+			}
+		})
+		.then(() => {
+			return res.redirect('/products')
+		})
+		.catch(error => console.log(error))
 
-
-		fs.writeFileSync(path.join(__dirname, '../data/productsDataBase.json'), JSON.stringify(productsModify, null, 3));
-
-		return res.redirect('/products');
 	}
 };
 
