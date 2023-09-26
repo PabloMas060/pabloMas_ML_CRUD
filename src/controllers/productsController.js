@@ -1,11 +1,5 @@
 db = require('../database/models')
 
-const fs = require('fs');
-const path = require('path');
-
-const productsFilePath = path.join(__dirname, '../data/productsDataBase.json');
-const products = JSON.parse(fs.readFileSync(productsFilePath, 'utf-8'));
-
 const toThousand = n => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
 const controller = {
@@ -36,18 +30,25 @@ const controller = {
 
 	// Create - Form to create
 	create: (req, res) => {
-		return res.render('product-create-form')
+		db.Category.findAll()
+			.then(categories => {
+				return res.render('product-create-form',{
+					categories
+				})
+			})
+			.catch(error => console.log(error))
+		
 	},
 
 	// Create -  Method to store
 	store: (req, res) => {
-		const { name, price, description, discount, category } = req.body;
+		const { name, price, description, discount, categoryId } = req.body;
 
 		db.Product.create({
 			name: name.trim(),
-			price: +price,
-			discount: +discount,
-			category,
+			price,
+			discount: discount || 0,
+			categoryId,
 			description: description.trim(),
 			image: req.file ? req.file.filename : null
 		})
@@ -61,9 +62,13 @@ const controller = {
 	// Update - Form to edit
 	edit: (req, res) => {
 		
+		const categories = db.Category.findAll()
 		const product = db.Product.findByPk(req.params.id)
-			.then((product) => {
+
+		Promise.all([categories,product])
+			.then(([categories, product]) => {
 				return res.render('product-edit-form', {
+					categories,
 					...product.dataValues
 				})
 			})
@@ -75,20 +80,21 @@ const controller = {
 	// Update - Method to update
 	update: (req, res) => {
 
-		const { name, price, description, discount, category } = req.body
+		const { name, price, description, discount, categoryId } = req.body
 
-		const productModified = db.Product.update({
+		db.Product.update({
 			name : name.trim(),
-				price : +price,
-				discount : +discount,
-				category,
-				description : description.trim()
+				price,
+				discount,
+				categoryId,
+				description : description.trim(),
+			   /* MODIFICAR PARA QUE UPDATEE IMAGENES */
 		},
 		{
 			where : {id : req.params.id}
 		})
-			.then((productModified) => {
-				return res.redirect('/products')
+			.then(() => {
+				return res.redirect('/products/detail/' + req.params.id)
 			})
 			.catch(error => console.log(error))
 	},

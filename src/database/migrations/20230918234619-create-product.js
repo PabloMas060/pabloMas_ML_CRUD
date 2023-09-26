@@ -19,7 +19,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       discount: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       image: {
         type: Sequelize.STRING
