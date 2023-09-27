@@ -1,3 +1,10 @@
+node_modules
+package-lock.json
+.env
+
+
+
+
 # Compiled source #
 ###################
 *.com
@@ -42,6 +49,5 @@ Thumbs.db
 *.cfg
 .htaccess
 *.config
-node_modules/
 .vscode/
-.env
+.e
