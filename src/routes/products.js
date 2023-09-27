@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const {uploadImage} = require('../middlewares/upload')
+const productCreateValidator = require('../validations/productCreateValidator')
 
 
 
@@ -15,7 +16,7 @@ router.get('/', index);
 
 /*** CREATE ONE PRODUCT ***/ 
 router.get('/create', create); 
-router.post('/create', uploadImage.single('image'), store); 
+router.post('/create', productCreateValidator, uploadImage.single('image'), store); 
 
 
 /*** GET ONE PRODUCT ***/ 

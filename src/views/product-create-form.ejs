@@ -20,20 +20,31 @@
 							<div class="col-12 col-md-6">
 								<label for="name" class="form-label">Nombre del producto:</label>
 								<input type="text" id="name" name="name" placeholder="Ej: Zapatillas Reebok"
-									class="form-input">
+									class="form-input <%= locals.errors && (errors.name && 'is-invalid') %>" value="<%= locals.old && (old.name && old.name) %>">
+									<small class="ms-2 text-danger">
+										<%= locals.errors && (errors.name && errors.name.msg) %>
+									</small>
 							</div>
 							<div class="col-12 col-md-6">
 								<label for="price" class="form-label">Precio del producto:</label>
-								<input type="text" id="price" name="price" placeholder="Ej: 5678" class="form-input">
+								<input type="text" id="price" name="price" placeholder="Ej: 5678" class="form-input <%= locals.errors && (errors.price && 'is-invalid') %>" 
+								value="<%= locals.old && (old.price && old.price) %>">
+								<small class="ms-2 text-danger">
+									<%= locals.errors && (errors.price && errors.price.msg) %>
+								</small>
 							</div>
 							<div class="col-12 col-md-6">
 								<label for="discount" class="form-label">Descuento:</label>
 								<input type="text" id="discount" name="discount" placeholder="Ej: 15"
-									class="form-input">
+									class="form-input <%= locals.errors && (errors.discount && 'is-invalid') %>" 
+									value="<%= locals.old && (old.discount && old.discount) %>">
+									<small class="ms-2 text-danger">
+										<%= locals.errors && (errors.discount && errors.discount.msg) %>
+									</small>
 							</div>
 							<div class="col-12 col-md-6">
 								<label for="categoryId" class="form-label">Categoría:</label>
-								<select name="categoryId" id="categoryId" class="form-input">
+								<select name="categoryId" id="categoryId" class="form-input <%= locals.errors && (errors.categoryId && 'is-invalid') %>">
 									<option value="" selected hidden>Elegí</option>
 									<% categories.forEach(category => { %>
 										<option value="<%= category.id %>"><%= category.name %></option>
@@ -42,12 +53,20 @@
 							</div>
 							<div class="col-12">
 								<label for="description" class="form-label">Descipción:</label>
-								<textarea name="description" id="description" class="form-input"></textarea>
+								<textarea name="description" id="description" class="form-input <%= locals.errors && (errors.description && 'is-invalid') %>">
+									<%= locals.old && (old.description && old.description) %>
+								</textarea>
+								<small class="ms-2 text-danger">
+									<%= locals.errors && (errors.description && errors.description.msg) %>
+								</small>
 							</div>
 
 							<div class="col-12 mb-3 d-flex justify-content-end gap-2">
+								<small class="ms-2 text-danger">
+									<%= locals.errors && (errors.image && errors.image.msg) %>
+								  </small>
 								<label for="image" class="btn btn-lg btn-success text-center">Agregar Imagen</label>
-								<input hidden class="form-control" type="file" id="image" name="image">
+								<input hidden class="form-control <%= locals.errors && (errors.image && 'is-invalid') %>" type="file" id="image" name="image">
 								<button type="submit" class="btn btn-lg btn-primary">Guardar producto</button>
 							</div>
 						</div>
